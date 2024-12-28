@@ -1,9 +1,10 @@
-const express = require('express')
+import express from 'express'
+
 const app = express()
 
-const indexRouter = require("./routes/indexRouter")
+import indexRouter from './routes/indexRouter.js'
 
 // sample route
 app.use("/", indexRouter)
 
-module.exports = app
+export default app

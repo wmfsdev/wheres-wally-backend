@@ -1,5 +1,5 @@
 
-import prisma from "../libs/prisma";
+import prisma from "../libs/prisma.js";
 
 async function createUser(user) {
     return await prisma.user.create({
@@ -11,4 +11,4 @@ function sampleController(req, res) {
     res.send('Hello World!')
 }
 
-module.exports = { sampleController, createUser }
+export { sampleController, createUser }
