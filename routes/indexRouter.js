@@ -6,7 +6,7 @@ const indexRouter = Router()
 // sample path and middleware
 indexRouter.get("/", sampleController)
 
-indexRouter.get("/", createUser)
+indexRouter.post("/", createUser)
 
 // POST for submitting coordinates (user click)
 
