@@ -10,12 +10,49 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("TEST_DATABASE_URL")
 }
 
-// sample model
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+
+model Player {
+  id         Int     @id @default(autoincrement())
+  name       String? @default("guest")
+  gameLength Int?
+  found      Int     @default(0)
+  // sessions   Session[]
 }
+
+model Session {
+  id          String   @id
+  sid         String   @unique
+  // player      Player   @relation(fields: [playerId], references: [id])
+  // playerId    Int
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+}
+
+model ImageBoard {
+  id           Int    @id @default(autoincrement())
+  name         String
+  imageURL     String?
+  coordinates  Coordinate[] // fx. [ [56, 78], [38, 23], ... ]
+}
+
+model Coordinate {
+  id          Int          @id
+  xy          ImageBoard   @relation(fields: [xyId], references: [id])
+  xyId        Int
+  coordinates Int[] // fx. one of the indexes from Coordinate[] [56, 78]
+} 
+
+
+
+
+// model Game {
+//   id      Int     @id @default(autoincrement())
+//   images  ImageBoard[]
+// }
+
+// imageboard
+// game         Game  @relation(fields: [gameId], references: [id])
+  // gameId       Int
