@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development && node --watch server.js",
-    "test": "NODE_ENV=test && vitest"
+    "test": "NODE_ENV=test && vitest -c ./vitest.config.unit.js",
+    "test:int": "NODE_ENV=test && vitest -c ./vitest.config.int.js"
   },
   "author": "",
   "license": "ISC",
