@@ -27,6 +27,7 @@ model Session {
   sid         String   @unique
   // player      Player   @relation(fields: [playerId], references: [id])
   // playerId    Int
+  data        String
   expiresAt   DateTime
   createdAt   DateTime @default(now())
 }
