@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { test } from '../controllers/gameController.js'
+import { test, post_check_coordinates } from '../controllers/gameController.js'
 
 import expressSession from 'express-session'
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
@@ -24,10 +24,11 @@ const createSession = expressSession({
 
 const gameRouter = Router()
 
-gameRouter.post('/new', createSession, test)
-// this uses req.params
+gameRouter.use('/board', createSession)
 
-gameRouter.get('/')
+gameRouter.post('/board/:id', test)
+
+gameRouter.get('/board/:id', test)
 
 // POST request will create the session since the user will pick from a range of images and submit the choice
 
