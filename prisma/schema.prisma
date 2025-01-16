@@ -15,27 +15,30 @@ datasource db {
 
 
 model Player {
-  id          Int     @id @default(autoincrement())
-  name        String? @default("guest")
+  id          Int       @id @default(autoincrement())
+  name        String?   @default("guest")
   gameLength  Int?
+  createdAt   DateTime  @default(now())
   coordinates FoundCoordinates[]
+  session     Session?  @relation(fields: [sessionId], references: [id])
+  sessionId   String?   @unique @default("")
 }
+
+model Session {
+  id          String   @id
+  sid         String   @unique
+  player      Player[]    
+  data        String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+}
+
 
 model FoundCoordinates {
   id            Int     @id @default(autoincrement())
   xy            Player  @relation(fields: [xyId], references: [id])
   xyId          Int
   coordinates   Int[]
-}
-
-model Session {
-  id          String   @id
-  sid         String   @unique
-  // player      Player   @relation(fields: [playerId], references: [id])
-  // playerId    Int
-  data        String
-  expiresAt   DateTime
-  createdAt   DateTime @default(now())
 }
 
 model ImageBoard {
