@@ -16,6 +16,7 @@ model Player {
   foundCoordinates  Int       @default(0)
   session           Session?  @relation(fields: [sessionId], references: [id])
   sessionId         String?   @unique @default("")
+  board             String?     
 }
 
 model Session {
@@ -31,12 +32,19 @@ model ImageBoard {
   id           Int      @id @default(autoincrement())
   name         String   @unique
   imageURL     String?
-  coordinates  Coordinate[] // fx. [ [56, 78], [38, 23], ... ]
+  character    Character[]
+}
+
+model Character { 
+  id          Int          @id @default(autoincrement())
+  name        ImageBoard   @relation(fields: [nameId], references: [id])
+  nameId      Int
+  coordinates Coordinate[]
 }
 
 model Coordinate {
   id          Int          @id @default(autoincrement())
-  xy          ImageBoard   @relation(fields: [xyId], references: [id])
+  xy          Character    @relation(fields: [xyId], references: [id])
   xyId        Int
-  coordinates Int[] // fx. one of the indexes from Coordinate[] [56, 78]
+  coordinates Int[]
 } 
