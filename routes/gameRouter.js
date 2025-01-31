@@ -1,7 +1,5 @@
 import { Router } from "express"
 import {  getImage, post_check_coordinates, test } from '../controllers/gameController.js'
-// connectPlayerSessionRelation
-// createPlayer,createCoordinates,
 import expressSession from 'express-session'
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 import prisma from "../libs/prisma.js"
@@ -10,9 +8,6 @@ const createSession = expressSession({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: 'http://localhost:5173',
-       secure: false,
-       httpOnly: false,
-      // overwrite: false
     },
     secret: process.env.SECRET,
     resave: true,
