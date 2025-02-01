@@ -5,8 +5,9 @@ import prisma from "../libs/prisma.js";
 
 async function post_check_coordinates(req, res, next) {
   console.log("check coordinates")
-  console.log(req.cookies)
- 
+  const imageId = req.params.id
+  const characterNameId = req.body.character
+  // console.log(req.cookies)
   // 0. check to see if there is a player with session ID
   const playerExists = await checkPlayerStatus(req.session.id)
   console.log("playerExists", playerExists)
@@ -17,9 +18,9 @@ async function post_check_coordinates(req, res, next) {
     // no player found - create and connect to session
     createPlayerConnectSession(sessionId)
   } // otherwise there is a player and carry on...
-
+  
   // 1.  check user coordinates against those stored in database - uses :id param to identify which image and whatever the input method happens to be (user click)
-  const { storedXCoordinate, storedYCoordinate } = await getImageCoordinates() // imageId, characterNameId
+  const { storedXCoordinate, storedYCoordinate } = await getImageCoordinates(imageId, characterNameId) // imageId, characterNameId
 
   // 2. function(user input from front end) NORMALISE coordinates
   // 3. check normalised coordinates against db query within acceptable range
@@ -51,5 +52,5 @@ async function getImage(req, res, next) {
   res.status(200).json()
 }
 
-export { post_check_coordinates, test, getImage }
-// connectPlayerSessionRelation, createCoordinates
+export { post_check_coordinates, getImage }
+// connectPlayerSessionRelation, createCoordinates, test
