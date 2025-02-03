@@ -37,7 +37,7 @@ async function getImageCoordinates(imageId, characterNameId) {
     select: {
       character: {
         where: {
-          nameId: parseInt(characterNameId),
+          characterName: characterNameId,
         },
         select: {
           coordinates: true
@@ -88,4 +88,9 @@ async function incrementFoundCoordinates(sessionId) {
   return player.foundCoordinates
 }
 
-export { getCoordinateMatchStatus, checkPlayerStatus, createPlayerConnectSession, getImageCoordinates, incrementFoundCoordinates }
+function extractSid(cookie) {
+  const sid = cookie.split(/:|\./)[1]
+  return sid
+}
+
+export { getCoordinateMatchStatus, checkPlayerStatus, createPlayerConnectSession, getImageCoordinates, incrementFoundCoordinates, extractSid }
