@@ -36,10 +36,11 @@ model ImageBoard {
 }
 
 model Character { 
-  id          Int          @id @default(autoincrement())
-  name        ImageBoard   @relation(fields: [nameId], references: [id])
-  nameId      Int
-  coordinates Coordinate[]
+  id            Int          @id @default(autoincrement())
+  name          ImageBoard   @relation(fields: [nameId], references: [id])
+  nameId        Int
+  characterName String       @unique @default("defaultchar")
+  coordinates   Coordinate[]
 }
 
 model Coordinate {
