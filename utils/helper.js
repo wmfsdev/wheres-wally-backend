@@ -47,7 +47,7 @@ async function getImageCoordinates(imageId, characterNameId) {
   })
   const storedXCoordinate = values.character[0].coordinates[0].coordinates[0]
   const storedYCoordinate = values.character[0].coordinates[0].coordinates[1]
-  return { storedXCoordinate, storedYCoordinate }
+  return { storedXCoordinate, storedYCoordinate}
 }
 
 function getCoordinateMatchStatus(coordinateX, coordinateY, clickX, clickY) {
@@ -93,4 +93,19 @@ function extractSid(cookie) {
   return sid
 }
 
-export { getCoordinateMatchStatus, checkPlayerStatus, createPlayerConnectSession, getImageCoordinates, incrementFoundCoordinates, extractSid }
+
+async function calculateGameRuntime(sid) {
+  const { createdAt } = await prisma.session.findUnique({
+    where: { id: sid },
+    select: {
+      createdAt: true
+    }
+  })
+
+  const startTime = new Date(createdAt)
+  const endTime = new Date()
+  const duration = (endTime - startTime) / 1000
+  return Math.floor(duration)
+}
+
+export { getCoordinateMatchStatus, checkPlayerStatus, createPlayerConnectSession, getImageCoordinates, incrementFoundCoordinates, extractSid, calculateGameRuntime }
