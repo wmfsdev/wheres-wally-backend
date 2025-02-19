@@ -1,6 +1,7 @@
 import express from 'express'
 import indexRouter from './routes/indexRouter.js'
 import gameRouter from './routes/gameRouter.js'
+import leaderBoardRouter from './routes/leaderBoardRouter.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
@@ -20,5 +21,6 @@ app.use(cookieParser())
 
 app.use("/", indexRouter)
 app.use("/game", gameRouter)
+app.use("/leaderboard", leaderBoardRouter)
 
 export default app
