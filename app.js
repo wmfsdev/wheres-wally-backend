@@ -1,5 +1,4 @@
 import express from 'express'
-import indexRouter from './routes/indexRouter.js'
 import gameRouter from './routes/gameRouter.js'
 import leaderBoardRouter from './routes/leaderBoardRouter.js'
 import cors from 'cors'
@@ -8,7 +7,7 @@ import cookieParser from 'cookie-parser'
 const app = express()
 
 app.use(cors({
-    origin: process.env.ORIGIN,
+    origin: process.env.CORS_ORIGIN,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
@@ -19,7 +18,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
 
-app.use("/", indexRouter)
 app.use("/game", gameRouter)
 app.use("/leaderboard", leaderBoardRouter)
 
