@@ -2,14 +2,12 @@ import prisma from '../libs/prisma.js'
 
 async function checkPlayerStatus(id) {
   console.log("check player status")
-  console.log("id: ", id)
-  
   const player = await prisma.player.findUnique({
     where: {
       sessionId: id
     }
   })
-  console.log("player found status: ", player)
+
   if (player === null) {
     return false
   } else return true 
@@ -29,7 +27,6 @@ async function createPlayerConnectSession(sessionId) {
 
 async function getImageCoordinates(imageId, characterNameId) {
   console.log("getImageCoordinates")
-  // FIND by board name and character id
   const values = await prisma.imageBoard.findUnique({
     where: {
       name: imageId
@@ -41,7 +38,7 @@ async function getImageCoordinates(imageId, characterNameId) {
         },
         select: {
           coordinates: true
-        } 
+        }
       }
     }
   })
@@ -52,11 +49,11 @@ async function getImageCoordinates(imageId, characterNameId) {
 
 function getCoordinateMatchStatus(coordinateX, coordinateY, clickX, clickY) {
   // if the difference between clickX and storedX is greater than 10? it's not in range
-  const lowEndX = coordinateX - 5
-  const highEndX = coordinateX + 6
+  const lowEndX = coordinateX - 10
+  const highEndX = coordinateX + 11
         
-  const lowEndY = coordinateY - 5
-  const highEndY = coordinateY + 6  // 25
+  const lowEndY = coordinateY - 10
+  const highEndY = coordinateY + 11
     
   let coordinateMatchStatus = false
   // if clickX (15) exists between low and high end ( 15 and 25 )
@@ -70,7 +67,6 @@ function getCoordinateMatchStatus(coordinateX, coordinateY, clickX, clickY) {
       }
     }
   }
-  console.log("checkedCoordinate =", coordinateMatchStatus)
   return coordinateMatchStatus
 }
 
@@ -84,7 +80,6 @@ async function incrementFoundCoordinates(sessionId) {
       foundCoordinates: { increment: 1 }
     }
   })
-  console.log("player.foundCoordinates", player.foundCoordinates)
   return player.foundCoordinates
 }
 
@@ -108,4 +103,20 @@ async function calculateGameRuntime(sid) {
   return Math.floor(duration)
 }
 
-export { getCoordinateMatchStatus, checkPlayerStatus, createPlayerConnectSession, getImageCoordinates, incrementFoundCoordinates, extractSid, calculateGameRuntime }
+async function conditionalCookieDestroy(req, res, next) {
+  console.log("DESTROY")
+  if (req.cookies['connect.sid'] !== undefined && req.method === 'GET') {
+    const sid = extractSid(req.cookies['connect.sid'])
+    console.log(sid)
+
+    const deletedSID = await prisma.session.delete({
+      where: {
+        sid: sid
+      }
+    })
+    console.log(deletedSID)
+  }
+  next()
+} 
+
+export { getCoordinateMatchStatus, checkPlayerStatus, createPlayerConnectSession, getImageCoordinates, incrementFoundCoordinates, extractSid, calculateGameRuntime, conditionalCookieDestroy }
