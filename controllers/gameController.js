@@ -46,7 +46,6 @@ async function getImage(req, res, next) {
   res.status(200).json()
 }
 
-
 async function put_player_gametime(req, res, next) {
   
   const { playerId, gameRuntime } = req.body
@@ -65,39 +64,18 @@ async function put_player_name(req, res, next) {
   console.log("put_player_name")
   const { playerId, gameRuntime, playerName, boardId } = req.body
 
-  if (gameRuntime) {
-    await prisma.player.update({
-      where: {
-        sessionId: playerId
-      },
-      data: {
-        name: playerName,
-        gameLength: gameRuntime,
-        board: boardId
-      }
-    })
-    res.status(200).json()
-    return
-  } else {
-    const [one, two] = await prisma.$transaction([
-      prisma.player.update({
-        where: {
-          sessionId: playerId
-        },
-        data: {
-          name: playerName,
-          gameLength: gameRuntime,
-          board: boardId
-        }
-      }),
-      prisma.session.delete({
-        where: {
-          sid: playerId
-        }
-      })
-    ])
-    res.status(200).json()
-  }
+  await prisma.player.update({
+    where: {
+      sessionId: playerId
+    },
+    data: {
+      name: playerName,
+      gameLength: gameRuntime,
+      board: boardId
+    }
+  })
+  res.status(200).json()
+
 }
 
 export { post_check_coordinates, getImage, put_player_gametime, put_player_name }
