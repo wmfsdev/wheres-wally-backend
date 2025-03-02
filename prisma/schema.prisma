@@ -31,7 +31,6 @@ model Session {
 model ImageBoard {
   id           Int      @id @default(autoincrement())
   name         String   @unique
-  imageURL     String?
   character    Character[]
 }
 
@@ -39,7 +38,7 @@ model Character {
   id            Int          @id @default(autoincrement())
   name          ImageBoard   @relation(fields: [nameId], references: [id])
   nameId        Int
-  characterName String       @unique @default("defaultchar")
+  characterName String       @unique 
   coordinates   Coordinate[]
 }
 
@@ -48,4 +47,4 @@ model Coordinate {
   xy          Character    @relation(fields: [xyId], references: [id])
   xyId        Int
   coordinates Int[]
-} 
+}
