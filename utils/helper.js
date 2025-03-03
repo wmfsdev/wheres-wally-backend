@@ -105,16 +105,15 @@ async function calculateGameRuntime(sid) {
 
 async function conditionalCookieDestroy(req, res, next) {
   console.log("DESTROY")
+ 
   if (req.cookies['connect.sid'] !== undefined && req.method === 'GET') {
     const sid = extractSid(req.cookies['connect.sid'])
-    console.log(sid)
 
-    const deletedSID = await prisma.session.delete({
+    await prisma.session.deleteMany({
       where: {
         sid: sid
       }
     })
-    console.log(deletedSID)
   }
   next()
 } 
