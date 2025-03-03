@@ -1,13 +1,13 @@
 import { Router } from "express"
-import {  getImage, post_check_coordinates, test } from '../controllers/gameController.js'
-import expressSession from 'express-session'
+import { post_check_coordinates, put_player_name } from '../controllers/gameController.js'
+import expressSession, { Store } from 'express-session'
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 import prisma from "../libs/prisma.js"
+import { conditionalCookieDestroy } from "../utils/helper.js"
 
 const createSession = expressSession({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: 'http://localhost:5173',
     },
     secret: process.env.SECRET,
     resave: true,
@@ -24,24 +24,11 @@ const createSession = expressSession({
 
 const gameRouter = Router()
 
-function log(req, res, next) {
-   console.log("middle")
-   console.log(req.headers)
-   next()
-}
+gameRouter.use('/board', conditionalCookieDestroy, createSession)
 
-gameRouter.use('/board', log, createSession)
-// gameRouter.get('/board/coord', createCoordinates)
+gameRouter.put('/player', put_player_name)
 
-gameRouter.get('/getimage', getImage)
+gameRouter.post('/board/:id', post_check_coordinates)
 
-gameRouter.post('/board/:id', post_check_coordinates) // POST
-
-gameRouter.get('/board/createplayer', test)
-
-// POST request will create the session since the user will pick from a range of images and submit the choice
-
-// GET for requesting selected image
-// POST for submitting coordinates (user click)
 
 export default gameRouter
