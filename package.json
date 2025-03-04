@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node server",
     "dev": "NODE_ENV=development && node --watch server.js",
     "test": "NODE_ENV=test && vitest -c ./vitest.config.unit.js",
     "test:int": "NODE_ENV=test && vitest -c ./vitest.config.int.js"
