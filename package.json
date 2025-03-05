@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server",
+    "build": "prisma generate && prisma migrate deploy && next build",
     "dev": "NODE_ENV=development && node --watch server.js",
     "test": "NODE_ENV=test && vitest -c ./vitest.config.unit.js",
     "test:int": "NODE_ENV=test && vitest -c ./vitest.config.int.js"
