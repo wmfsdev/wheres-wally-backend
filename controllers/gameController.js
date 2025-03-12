@@ -5,6 +5,7 @@ import prisma from "../libs/prisma.js";
 
 async function post_check_coordinates(req, res, next) {
   console.log("check coordinates")
+  
   const imageId = req.params.id
   const characterNameId = req.body.character
   const { x, y } = req.body.coordinates
