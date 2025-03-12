@@ -8,8 +8,6 @@ const app = express()
 
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
-    allowedHeaders: ['Content-Type', 'Authorization','Connection'],
-    exposedHeaders: ['application/x-www-form-urlencoded', 'multipart/form-data', 'text/plain'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
@@ -24,3 +22,4 @@ app.use("/game", gameRouter)
 app.use("/leaderboard", leaderBoardRouter)
 
 export default app
+
