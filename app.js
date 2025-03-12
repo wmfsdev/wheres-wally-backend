@@ -8,8 +8,9 @@ const app = express()
 
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
+    allowedHeaders: ['access-control-allow-origin','Origin', 'Content-Type', 'Authorization', 'X-Requested-With'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
+    preflightContinue: true,
     optionsSuccessStatus: 204,
     credentials: true,
 }))
