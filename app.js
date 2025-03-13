@@ -6,6 +6,10 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
+app.options('/*', (_, res) => {
+    res.sendStatus(200);
+});
+
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -13,7 +17,6 @@ app.use(cors({
     optionsSuccessStatus: 204,
     credentials: true,
 }))
-
 
 app.use((req, res, next) => {
     res.setHeader(
