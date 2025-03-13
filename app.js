@@ -8,13 +8,20 @@ const app = express()
 
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
-    allowedHeaders: ['Origin', 'Content-Type', 'Authorization', 'X-Content-Type-Options', 'Accept, X-Requested-With', Origin, 'Access-Control-Request-Method', 'Access-Control-Request-Headers'],
-    exposedHeaders: ['Origin', 'Content-Type', 'Authorization', 'X-Content-Type-Options', 'Accept, X-Requested-With', Origin, 'Access-Control-Request-Method', 'Access-Control-Request-Headers'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: true,
     optionsSuccessStatus: 204,
     credentials: true,
 }))
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Origin", "https://wheres-wally-frontend-xi.vercel.app");
+    res.header("Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-HTTP-Method-Override, Set-Cookie, Cookie");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    next();  
+ }); 
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
