@@ -14,14 +14,25 @@ app.use(cors({
     credentials: true,
 }))
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header("Access-Control-Allow-Origin", "https://wheres-wally-frontend-xi.vercel.app");
-    res.header("Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-HTTP-Method-Override, Set-Cookie, Cookie");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    next();  
- }); 
+
+app.use((req, res, next) => {
+    res.setHeader(
+      "Access-Control-Allow-Origin",
+      "https://wheres-wally-frontend-xi.vercel.app"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+    );
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    res.setHeader("Access-Control-Allow-Private-Network", true);
+    res.setHeader("Access-Control-Max-Age", 7200);
+    next();
+  });
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
