@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
-app.options('*', cors())
+app.options('/*', cors())
 
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
