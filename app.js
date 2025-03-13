@@ -8,6 +8,8 @@ const app = express()
 
 app.options('/board', cors())
 
+app.set('trust proxy', 1)
+
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
