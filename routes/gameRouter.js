@@ -9,7 +9,7 @@ const createSession = expressSession({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: 'none',
-      secure: false,
+      secure: true,
       httpOnly: true
     },
     secret: process.env.SECRET,
