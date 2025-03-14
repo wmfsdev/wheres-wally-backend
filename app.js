@@ -6,17 +6,27 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
-app.set('trust proxy', 1)
+// app.use(cors({
+//     origin: 'https://wheres-wally-frontend-xi.vercel.app',
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+//     allowedHeaders: ['Content-Type', 'Authorization', 'X-Content-Type-Options', 'Accept', 'X-Requested-With', 'Origin', 'Content-Range', 'Content-Disposition', 'Content-Description'],
+//     preflightContinue: true,
+//     optionsSuccessStatus: 204,
+//     credentials: true,
+// }))
 
-app.use(cors({
-    origin: 'https://wheres-wally-frontend-xi.vercel.app',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Content-Type-Options', 'Accept', 'X-Requested-With', 'Origin', 'Content-Range', 'Content-Disposition', 'Content-Description'],
-    preflightContinue: true,
-    optionsSuccessStatus: 204,
-    credentials: true,
-}))
+app.use(function (req, res, next) {
+  console.log("access allow")
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
 
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  next();
+});
 
 // app.use((req, res, next) => {
 //   res.setHeader(
