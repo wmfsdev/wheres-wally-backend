@@ -17,7 +17,7 @@ const app = express()
 
 app.use(function (req, res, next) {
   console.log("access allow")
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
+  res.setHeader('Access-Control-Allow-Origin', 'https://wheres-wally-frontend-xi.vercel.app');
 
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
