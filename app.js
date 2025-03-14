@@ -9,7 +9,7 @@ const app = express()
 app.set('trust proxy', 1)
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://wheres-wally-frontend-xi.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: true,
     optionsSuccessStatus: 204,
