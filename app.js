@@ -11,8 +11,8 @@ app.set('trust proxy', 1)
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: '*',
-    exposedHeaders: '*',
+    allowedHeaders: 'Access-Control-Allow-Origin',
+    exposedHeaders: 'Access-Control-Allow-Origin',
     preflightContinue: true,
     optionsSuccessStatus: 204,
     credentials: true,
