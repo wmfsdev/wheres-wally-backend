@@ -8,8 +8,8 @@ import { conditionalCookieDestroy } from "../utils/helper.js"
 const createSession = expressSession({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: 'none',
-      secure: true,
+      // sameSite: 'none',
+      // secure: true,
     },
     secret: process.env.SECRET,
     resave: true,
@@ -26,7 +26,9 @@ const createSession = expressSession({
 
 const gameRouter = Router()
 
-gameRouter.use('/board', conditionalCookieDestroy, createSession)
+// gameRouter.use('/board', conditionalCookieDestroy, createSession)
+
+gameRouter.get('/board/maze', conditionalCookieDestroy, createSession )
 
 gameRouter.put('/player', put_player_name)
 
