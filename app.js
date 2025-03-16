@@ -10,7 +10,7 @@ app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Content-Type-Options', 'Accept', 'X-Requested-With', 'Origin', 'Content-Range', 'Content-Disposition', 'Content-Description'],
-    preflightContinue: false,
+    preflightContinue: true,
     optionsSuccessStatus: 204,
     credentials: true,
 }))
