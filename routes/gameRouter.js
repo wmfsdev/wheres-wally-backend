@@ -26,9 +26,7 @@ const createSession = expressSession({
 
 const gameRouter = Router()
 
-// gameRouter.use('/board', conditionalCookieDestroy, createSession)
-
-gameRouter.get('/board/maze', conditionalCookieDestroy, createSession )
+gameRouter.get('/board/:id', conditionalCookieDestroy, createSession)
 
 gameRouter.put('/player', put_player_name)
 
