@@ -27,6 +27,7 @@ async function createPlayerConnectSession(sessionId) {
 
 async function getImageCoordinates(imageId, characterNameId) {
   console.log("getImageCoordinates")
+
   const values = await prisma.imageBoard.findUnique({
     where: {
       name: imageId
