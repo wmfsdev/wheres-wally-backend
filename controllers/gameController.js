@@ -30,7 +30,7 @@ async function post_check_coordinates(req, res, next) {
     // increment player's FoundCoordinates counter +1
     const foundCoordinateCount = await incrementFoundCoordinates(sid)
     // WIN CHECK
-    if (foundCoordinateCount === 2) {
+    if (foundCoordinateCount === 4) {
       console.log("WIN")
       const gameRuntime = await calculateGameRuntime(sid)
       return res.status(200).json({ status: "win!", gameRuntime: gameRuntime, playerId: sid  })
