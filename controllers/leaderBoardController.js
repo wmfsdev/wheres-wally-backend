@@ -4,10 +4,10 @@ import prisma from "../libs/prisma.js";
 async function get_times(req, res, next) {
   const [ maze, football, rome ] = await prisma.$transaction([
     prisma.player.findMany({
-      take: 10,
+      take: 15,
       where: {
         board: 'maze',
-        gameLength: { not: null }
+        gameLength: { not: null },
       },
       select: {
         name: true,
@@ -19,7 +19,7 @@ async function get_times(req, res, next) {
       }
     }),
     prisma.player.findMany({
-      take: 10,
+      take: 15,
       where: {
         board: 'football',
         gameLength: { not: null }
@@ -34,7 +34,7 @@ async function get_times(req, res, next) {
       }
     }),
     prisma.player.findMany({
-      take: 10,
+      take: 15,
       where: {
         board: 'rome',
         gameLength: { not: null }
