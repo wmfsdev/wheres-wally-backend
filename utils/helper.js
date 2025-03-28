@@ -50,11 +50,11 @@ async function getImageCoordinates(imageId, characterNameId) {
 
 function getCoordinateMatchStatus(coordinateX, coordinateY, clickX, clickY) {
   // if the difference between clickX and storedX is greater than 10? it's not in range
-  const lowEndX = coordinateX - 10
-  const highEndX = coordinateX + 11
+  const lowEndX = coordinateX - 20
+  const highEndX = coordinateX + 21
         
-  const lowEndY = coordinateY - 10
-  const highEndY = coordinateY + 11
+  const lowEndY = coordinateY - 20
+  const highEndY = coordinateY + 21
     
   let coordinateMatchStatus = false
   // if clickX (15) exists between low and high end ( 15 and 25 )
