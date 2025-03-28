@@ -1,6 +1,8 @@
 
 import { getCoordinateMatchStatus, checkPlayerStatus, createPlayerConnectSession, getImageCoordinates, incrementFoundCoordinates, extractSid, calculateGameRuntime } from "../utils/helper.js";
 import prisma from "../libs/prisma.js";
+import { validationResult } from 'express-validator'
+import { Prisma } from "@prisma/client";
 
 
 async function post_check_coordinates(req, res, next) {
@@ -33,7 +35,7 @@ async function post_check_coordinates(req, res, next) {
     if (foundCoordinateCount === 4) {
       console.log("WIN")
       const gameRuntime = await calculateGameRuntime(sid)
-      return res.status(200).json({ status: "win!", gameRuntime: gameRuntime, playerId: sid  })
+      return res.status(200).json({ status: "win!", gameRuntime: gameRuntime, playerId: sid  }) // cookie
     }
     return res.status(200).json({ status: "found element", gameRuntime: null})
   } else {
@@ -63,20 +65,43 @@ async function put_player_gametime(req, res, next) {
 
 async function put_player_name(req, res, next) {
   console.log("put_player_name")
-  const { playerId, gameRuntime, playerName, boardId } = req.body
+  try {
+    const errors = validationResult(req)
 
-  await prisma.player.update({
-    where: {
-      sessionId: playerId
-    },
-    data: {
-      name: playerName,
-      gameLength: gameRuntime,
-      board: boardId
+    if (!errors.isEmpty()) {
+      console.log('validation errors');
+      const err = new Error('validation failed');
+      err.statusCode = 422;
+      err.data = errors.array();
+      throw err;
     }
-  })
-  res.status(200).json()
 
+    const { playerId, gameRuntime, playerName, boardId } = req.body
+
+    await prisma.player.update({
+      where: {
+        sessionId: playerId
+      },
+      data: {
+        name: playerName,
+        gameLength: gameRuntime,
+        board: boardId
+      }
+    })
+    res.status(200).json()
+
+  } catch(error) {
+    console.log("caught error")
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log("prisma error")
+      console.log(error.code)
+      console.log(error.message)
+      return
+    }
+    console.log("validation error")
+    const status = error.statusCode
+    res.status(status).json(error.message)
+  }
 }
 
 export { post_check_coordinates, getImage, put_player_gametime, put_player_name }
