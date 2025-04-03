@@ -96,11 +96,13 @@ async function put_player_name(req, res, next) {
       console.log("prisma error")
       console.log(error.code)
       console.log(error.message)
+      res.status(500).end()
       return
     }
     console.log("validation error")
     const status = error.statusCode
-    res.status(status).json(error.message)
+    const message = error.message
+    res.status(status).json({ message: message }) 
   }
 }
 
