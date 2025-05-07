@@ -32,8 +32,8 @@ gameRouter.get('/board/:id', conditionalCookieDestroy, createSession)
 gameRouter.put('/player', [
   body('playerName')
     .trim()
-    .isLength({ max: 10 })
-    .withMessage('Name too long'),
+    .isLength({ min: 1, max: 10 })
+    .withMessage('Character length must be between 1 and 10'),
   body('gameRuntime')
     .isInt().optional(),
 ], put_player_name)
