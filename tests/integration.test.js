@@ -5,67 +5,96 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // INTEGRATION TESTS
 
-describe('[POST] /game/board', () => {
+describe('[GET] /game/board', () => {
   afterEach(async () => {
-  console.log("after")
+    console.log("after")
     await prisma.$transaction([
-        prisma.session.deleteMany(),
+      prisma.session.deleteMany(),
     ])
   })
 
   it('should create session in database and set cookie in header', async() => {
-    const session = await prisma.session.findFirst()
     const response = await request(app)
-      .post('/game/board')
-      .set('Content-Type', 'application/json')
-      .send()
+      .get('/game/board/:id')
+    
     const newSession = await prisma.session.findFirst()
 
-    expect(session).toBeNull()
     expect(response.get("Set-Cookie")).toBeDefined()
     expect(newSession).not.toBeNull()
   })
 })
 
-// describe( // two successive visits only one cookie? )
 
-describe ('[POST] /game/board/:id', () => {
-  beforeEach(async () => {
-      console.log("before")
-      const cookie = `{"cookie":{"originalMaxAge":604800000,"expires":"2025-02-05T21:35:35.853Z","httpOnly":true,"path":"/"}}`
+describe('[GET] /game/board', () => {
+  it('should delete first session on new visit', async() => {
 
-      const session = await prisma.session.create({
-         data: {
-            id: 'testsid',
-            sid: 'testsid',
-            data: cookie,
-            expiresAt: '2025-02-05T21:35:35.853Z'
-         }
-      })
-      const player = await prisma.player.create({
-         data: {
-           session: {
-             connect: { id: 'testsid' }
-           }
-         }
-      })
-      const image = await prisma.imageBoard.create({
-         data: {
-            name: '1',
-            character: {   
-               create: {
-                  characterName: 'nameA',
-                  coordinates: {
-                     create: {
-                        coordinates: [15, 25]
-                     }
-                  }
-               }
-            }   
-         }   
-      })  
-      
+    await prisma.session.create({
+      data: {
+        id: 'testsid',
+        sid: 'testsid',
+        data: "",
+        expiresAt: '2025-02-05T21:35:35.853Z'
+      }
+    })
+    
+    const first = await request(app)
+      .get('/game/board/:id')
+      .set('Cookie', ['connect.sid=s:testsid.test'])
+
+    const session = await prisma.session.findUnique({
+      where: {
+        id: 'testid'
+      }
+    })
+    expect(session).toBeNull()
   })
+
+  it('should create/set new cookie on each new visit', async() => {
+    const first = await request(app)
+      .get('/game/board/:id')
+    const second = await request(app)
+      .get('/game/board/:id')
+
+    expect(first.get("Set-Cookie")).not.toEqual(second.get("Set-Cookie"))
+  })
+})
+
+describe('[POST] /game/board/:id', () => {
+  beforeEach(async () => {
+    const cookie = `{"cookie":{"originalMaxAge":604800000,"expires":"2025-02-05T21:35:35.853Z","httpOnly":true,"path":"/"}}`
+
+    const session = await prisma.session.create({
+        data: {
+          id: 'testsid',
+          sid: 'testsid',
+          data: cookie,
+          expiresAt: '2025-02-05T21:35:35.853Z'
+        }
+    })
+    const player = await prisma.player.create({
+      data: {
+        session: {
+          connect: { id: 'testsid' }
+        }
+      }
+    })
+    const image = await prisma.imageBoard.create({
+      data: {
+        name: '1',
+        character: {   
+          create: {
+            characterName: 'nameA',
+            coordinates: {
+              create: {
+                coordinates: [15, 25]
+              }
+            }
+          }
+        }   
+      }   
+    })     
+  })
+
   afterEach(async () => {
       console.log("after")
       await prisma.$transaction([
@@ -95,6 +124,7 @@ describe ('[POST] /game/board/:id', () => {
     const response = request(app)
     await response.post('/game/board/1').set('Accept', 'application/json').set('Cookie', ['connect.sid=s:testsid.test']).send({character: 'nameA', coordinates: { x: 15, y: 25 }})
     await response.post('/game/board/1').set('Accept', 'application/json').set('Cookie', ['connect.sid=s:testsid.test']).send({character: 'nameA', coordinates: { x: 15, y: 25 }})
+    await response.post('/game/board/1').set('Accept', 'application/json').set('Cookie', ['connect.sid=s:testsid.test']).send({character: 'nameA', coordinates: { x: 15, y: 25 }})
 
     const final = await response
       .post('/game/board/1')
@@ -122,5 +152,78 @@ describe ('[POST] /game/board/:id', () => {
     expect(response.status).toEqual(200);
     expect(response.body.status).toEqual('no element found')
   })
+})
 
+describe('[PUT] /player', () => {
+  afterEach(async () => {
+    console.log("after")
+    await prisma.$transaction([
+      prisma.session.deleteMany(),
+      prisma.player.deleteMany(),
+    ])
+  })
+
+  it('should update player name, ', async() => {
+    const session = await prisma.session.create({
+      data: {
+        id: 'testsid',
+        sid: 'testsid',
+        data: "",
+        expiresAt: '2025-02-05T21:35:35.853Z'
+      }
+    })
+
+    const player = await prisma.player.create({
+      data: {
+        name: 'testname',
+        sessionId: 'testsid',
+        board: 'maze'
+      }
+    })
+
+    const response = await request(app)
+      .put('/game/player')
+      .set('Content-Type', 'application/json')
+      .send({
+        playerName: 'newname',
+        playerId: 'testsid'
+      })
+
+    const updatedPlayer = await prisma.player.findFirst()
+
+    expect(player.name).toEqual('testname')
+    expect(response.status).toEqual(200);
+    expect(updatedPlayer.name).toEqual('newname')
+  })
+
+  it('should return 422 status code with message upon validation error (invalid user input)', async() => {
+    const session = await prisma.session.create({
+      data: {
+        id: 'testsid',
+        sid: 'testsid',
+        data: "",
+        expiresAt: '2025-02-05T21:35:35.853Z'
+      }
+    })
+
+    const player = await prisma.player.create({
+      data: {
+        name: 'testname',
+        sessionId: 'testsid',
+        board: 'maze'
+      }
+    })
+
+    const response = await request(app)
+      .put('/game/player')
+      .set('Content-Type', 'application/json')
+      .send({
+        playerName: '',
+        playerId: 'testsid'
+      })
+    const { msg } = JSON.parse(response.text)[0]
+    
+    expect(response.status).toEqual(422)
+    expect(msg).toEqual('Character length must be between 1 and 10')
+  }) 
 })
