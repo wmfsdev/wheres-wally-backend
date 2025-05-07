@@ -1,7 +1,6 @@
 import prisma from '../libs/prisma.js'
 
 async function checkPlayerStatus(id) {
-  console.log("check player status")
   const player = await prisma.player.findUnique({
     where: {
       sessionId: id
@@ -14,7 +13,6 @@ async function checkPlayerStatus(id) {
 }
 
 async function createPlayerConnectSession(sessionId) {
-  console.log("sessionId: ", sessionId)
   const player = await prisma.player.create({
     data: {
       session: {
@@ -22,12 +20,9 @@ async function createPlayerConnectSession(sessionId) {
       }
     }
   })
-  console.log(player)
 }
 
 async function getImageCoordinates(imageId, characterNameId) {
-  console.log("getImageCoordinates")
-
   const values = await prisma.imageBoard.findUnique({
     where: {
       name: imageId
@@ -49,7 +44,6 @@ async function getImageCoordinates(imageId, characterNameId) {
 }
 
 function getCoordinateMatchStatus(coordinateX, coordinateY, clickX, clickY) {
-  // if the difference between clickX and storedX is greater than 10? it's not in range
   const lowEndX = coordinateX - 20
   const highEndX = coordinateX + 21
         
@@ -57,8 +51,7 @@ function getCoordinateMatchStatus(coordinateX, coordinateY, clickX, clickY) {
   const highEndY = coordinateY + 21
     
   let coordinateMatchStatus = false
-  // if clickX (15) exists between low and high end ( 15 and 25 )
-  // then check clickY (15) exists between low and high end ( 15 and 25 )
+ 
   for ( let i = lowEndX ; i !== highEndX ; i++ ) {
     if (i === clickX) {
       for ( let c = lowEndY ; c !== highEndY ; c++ ) {
@@ -72,7 +65,6 @@ function getCoordinateMatchStatus(coordinateX, coordinateY, clickX, clickY) {
 }
 
 async function incrementFoundCoordinates(sessionId) {
-
   const player = await prisma.player.update({
     where: {
       sessionId: sessionId
@@ -105,11 +97,8 @@ async function calculateGameRuntime(sid) {
 }
 
 async function conditionalCookieDestroy(req, res, next) {
-  console.log("DESTROY")
- 
   if (req.cookies['connect.sid'] !== undefined && req.method === 'GET') {
     const sid = extractSid(req.cookies['connect.sid'])
-
     await prisma.session.deleteMany({
       where: {
         sid: sid
