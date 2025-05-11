@@ -1,7 +1,6 @@
 # WHERE'S WALLY
 
 LIVE: [https://wheres-wally-frontend-xi.vercel.app](https://wheres-wally-frontend-xi.vercel.app/ "https://wheres-wally-frontend-xi.vercel.app")<br>
-BACKEND REPO: [https://github.com/wmfsdev/wheres-wally-backend](https://github.com/wmfsdev/wheres-wally-backend "https://github.com/wmfsdev/wheres-wally-backend")<br>
 FRONTEND REPO: [https://github.com/wmfsdev/wheres-wally-frontend](https://github.com/wmfsdev/wheres-wally-frontend "https://github.com/wmfsdev/wheres-wally-frontend")
 
 ## OUTLINE
