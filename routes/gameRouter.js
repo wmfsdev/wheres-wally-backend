@@ -9,7 +9,7 @@ import { body } from 'express-validator'
 const createSession = expressSession({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: 'none',
+      domain: 'wheres-wally-frontend-xi.vercel.app',
       secure: true,
     },
     secret: process.env.SECRET,
