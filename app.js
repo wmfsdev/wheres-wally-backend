@@ -10,8 +10,11 @@ app.set("trust proxy", 1);
     
 app.use(cors({
     origin: 'https://wheres-wally-frontend-xi.vercel.app',
-    allowedHeaders: ["Content-Type", "Connection"],
-    credentials:true,
+    allowedHeaders: ["Content-Type", "Connection", "Accept", "Origin"],
+    credentials: true,
+    preflightContinue: true,
+    optionsSuccessStatus: 204,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
 }))
 
 app.use(express.json())
